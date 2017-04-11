@@ -24,17 +24,23 @@ public class Fracao {
 	}
 
 	public Fracao Soma(Fracao f) {
+		Fracao resultado = null;
+		
 		int n1 = numerador.getNumero();
 		int d1 = denominador.getNumero();
 		int n2 = f.getNumerador().getNumero();
 		int d2 = f.getDenominador().getNumero();
 		
-		int mmc = Mmc.calcula(denominador, f.getDenominador()).getNumero();
+		if (d1 != d2) {
+			int mmc = Mmc.calcula(denominador, f.getDenominador()).getNumero();			
+			n1 *= d2;
+			n2 *= d1;
+			resultado = new Fracao(new NumeroInt(n1+n2), new NumeroInt(mmc));
+		} else {
+			resultado = new Fracao(new NumeroInt(n1+n2), new NumeroInt(d1));
+		}
 		
-		n1 *= d2;
-		n2 *= d1;
-		
-		return new Fracao(new NumeroInt(n1+n2), new NumeroInt(mmc));
+		return resultado;
 	}
 	
 	@Override
