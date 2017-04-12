@@ -4,6 +4,7 @@
  */
 package atec.flj.mat;
 
+import atec.flj.mat.funcoes.Mdc;
 import atec.flj.mat.funcoes.Mmc;
 
 public class Fracao {
@@ -14,8 +15,16 @@ public class Fracao {
 		return numerador;
 	}
 
+	public void setNumerador(NumeroInt numerador) {
+		this.numerador = numerador;
+	}
+
 	public NumeroInt getDenominador() {
 		return denominador;
+	}
+
+	public void setDenominador(NumeroInt denominador) {
+		this.denominador = denominador;
 	}
 
 	public Fracao(NumeroInt numerador, NumeroInt denominador) {
@@ -23,29 +32,39 @@ public class Fracao {
 		this.denominador = denominador;
 	}
 
-	public Fracao Soma(Fracao f) {
-		Fracao resultado = null;
-		
+	public Fracao Soma(Fracao fracaoAsomar) {
 		int n1 = numerador.getNumero();
 		int d1 = denominador.getNumero();
-		int n2 = f.getNumerador().getNumero();
-		int d2 = f.getDenominador().getNumero();
-		
-		if (d1 != d2) {
-			int mmc = Mmc.calcula(denominador, f.getDenominador()).getNumero();			
-			n1 *= d2;
-			n2 *= d1;
-			resultado = new Fracao(new NumeroInt(n1+n2), new NumeroInt(mmc));
-		} else {
-			resultado = new Fracao(new NumeroInt(n1+n2), new NumeroInt(d1));
-		}
-		
-		return resultado;
+		int n2 = fracaoAsomar.getNumerador().getNumero();
+		int d2 = fracaoAsomar.getDenominador().getNumero();
+		int novoNumerador = 0;
+		int novoDenominador = 0;
+		int mdc = 0;
+
+		novoDenominador = Mmc.calcula(this.denominador, fracaoAsomar.getDenominador()).getNumero();
+		n1 *= novoDenominador / d1;
+		n2 *= novoDenominador / d2;
+		novoNumerador = n1 + n2;
+
+		mdc = Mdc.calcula(new NumeroInt(novoNumerador), new NumeroInt(novoDenominador)).getNumero();
+		novoNumerador /= mdc;
+		novoDenominador /= mdc;
+
+		setNumerador(new NumeroInt(novoNumerador));
+		setDenominador(new NumeroInt(novoDenominador));
+
+		return this;
 	}
-	
+
 	@Override
 	public String toString() {
-		return numerador + "/" + denominador;
+		String resultado = "";
+		if (this.denominador.getNumero() == 1) {
+			resultado += numerador;
+		} else {
+			resultado = numerador + "/" + denominador;
+		}
+		return resultado;
 	}
 
 }
